@@ -1,10 +1,12 @@
-import { Navbar } from './components/index';
+import { CartContainer, Navbar } from './components/index';
 
 const App = () => {
   return (
     <>
       <Navbar />
-      <main></main>
+      <main>
+        <CartContainer />
+      </main>
     </>
   );
 };
