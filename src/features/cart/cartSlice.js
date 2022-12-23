@@ -1,4 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+const url = 'https://course-api.com/react-useReducer-cart-project';
 
 const initialState = {
   cartItems: [],
@@ -7,14 +10,18 @@ const initialState = {
   isLoading: true,
 };
 
-const link = 'https://course-api.com/react-useReducer-cart-project';
-
 // TODO: createAsyncThunk that handles asyncronous logic in your redux application
-export const getCartItems = createAsyncThunk('cart/getCartItems', () => {
-  return fetch(link)
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
-});
+export const getCartItems = createAsyncThunk(
+  'cart/getCartItems',
+  async (name, thunkAPI) => {
+    try {
+      const response = await axios(url);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue('Something went wrong!');
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -47,19 +54,18 @@ const cartSlice = createSlice({
       state.total = total;
     },
   },
-  extraReducers: {
-    [getCartItems.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [getCartItems.fulfilled]: (state, action) => {
-      console.log(action);
-      state.isLoading = false;
-      state.cartItems = action.payload;
-    },
-    [getCartItems.rejected]: (state) => {
-      state.isLoading = false;
-    },
-  },
+  extraReducers: (builder) =>
+    builder
+      .addCase(getCartItems.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCartItems.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload;
+      })
+      .addCase(getCartItems.rejected, (state) => {
+        state.isLoading = false;
+      }),
 });
 
 export const { clearCart, removeItem, increse, decrese, calculateTotals } =
