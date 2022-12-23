@@ -26,7 +26,11 @@ const CardItem = ({ id, title, price, img, amount }) => {
         <p className='amount'>{amount}</p>
         <button
           className='amount-btn'
-          onClick={() => dispatch(decrese({ id }))}>
+          onClick={() => {
+            amount === 1
+              ? dispatch(removeItem({ id }))
+              : dispatch(decrese({ id }));
+          }}>
           <ChevronDown />
         </button>
       </div>

@@ -22,11 +22,11 @@ const cartSlice = createSlice({
     },
     increse: (state, { payload }) => {
       const cartItem = state.cartItems.find((cart) => cart.id === payload.id);
-      cartItem.amount = cartItem.amount + 1;
+      cartItem.amount++;
     },
     decrese: (state, { payload }) => {
       const cartItem = state.cartItems.find((cart) => cart.id === payload.id);
-      cartItem.amount = cartItem.amount - 1;
+      cartItem.amount--;
     },
   },
 });
