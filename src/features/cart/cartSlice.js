@@ -1,12 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { cartItems } from '../../utils/cartItems';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
-  cartItems: cartItems,
+  cartItems: [],
   amount: 0,
   total: 0,
   isLoading: true,
 };
+
+const link = 'https://course-api.com/react-useReducer-cart-project';
+
+// TODO: createAsyncThunk that handles asyncronous logic in your redux application
+export const getCartItems = createAsyncThunk('cart/getCartItems', () => {
+  return fetch(link)
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+});
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -37,6 +45,19 @@ const cartSlice = createSlice({
       });
       state.amount = amount;
       state.total = total;
+    },
+  },
+  extraReducers: {
+    [getCartItems.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCartItems.fulfilled]: (state, action) => {
+      console.log(action);
+      state.isLoading = false;
+      state.cartItems = action.payload;
+    },
+    [getCartItems.rejected]: (state) => {
+      state.isLoading = false;
     },
   },
 });
