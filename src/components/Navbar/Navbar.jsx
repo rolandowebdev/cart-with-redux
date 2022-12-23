@@ -1,9 +1,10 @@
-import { CartIcon } from '../../utils/icons';
 import { useSelector } from 'react-redux';
+import { CartIcon } from '../../utils/icons';
 
 const Navbar = () => {
   // * useSelector is used to access reducer or state from redux
   const { amount } = useSelector((store) => store.cart);
+
   return (
     <nav>
       <div className='nav-center'>
